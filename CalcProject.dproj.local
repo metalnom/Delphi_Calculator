@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>1899-12-30 00:00:00.000.189,C:\projects\Unit1.pas=C:\Users\SR시스템\Downloads\CalcProject\MainForm.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.210,=C:\projects\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.189,C:\projects\Unit1.dfm=C:\Users\SR시스템\Downloads\CalcProject\MainForm.dfm</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.652,C:\projects\Project1.dproj=C:\Users\SR시스템\Downloads\CalcProject\CalcProject.dproj</Transaction>
+  </Transactions>
+</BorlandProject>

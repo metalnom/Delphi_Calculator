@@ -1,0 +1,826 @@
+unit MainForm;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls;
+
+type
+  TfrmMain = class(TForm)
+    edtFormula: TEdit;
+    edtResult: TEdit;
+    btnPercent: TButton;
+    btnClearEntry: TButton;
+    btnClear: TButton;
+    btnBackSpace: TButton;
+    btnInverse: TButton;
+    btnSquare: TButton;
+    btnRoot: TButton;
+    btnDivide: TButton;
+    btnNum7: TButton;
+    btnNum8: TButton;
+    btnNum9: TButton;
+    btnMultiply: TButton;
+    btnNum4: TButton;
+    btnNum5: TButton;
+    btnNum6: TButton;
+    btnSub: TButton;
+    btnNum1: TButton;
+    btnNum2: TButton;
+    btnNum3: TButton;
+    btnAdd: TButton;
+    btnSign: TButton;
+    btnNum0: TButton;
+    btnPoint: TButton;
+    btnEqual: TButton;
+    btn2jin: TButton;
+    edtMem4: TEdit;
+    edtMem3: TEdit;
+    edtMem2: TEdit;
+    edtMem1: TEdit;
+    btnLoad4: TButton;
+    btnLoad3: TButton;
+    btnLoad2: TButton;
+    btnLoad1: TButton;
+    btn8jin: TButton;
+    btn16jin: TButton;
+    Panel1: TPanel;
+    Label1: TLabel;
+    edtJinNum: TEdit;
+    procedure btnNum0Click(Sender: TObject);
+    procedure btnNum1Click(Sender: TObject);
+    procedure btnNum2Click(Sender: TObject);
+    procedure btnNum3Click(Sender: TObject);
+    procedure btnNum4Click(Sender: TObject);
+    procedure btnNum5Click(Sender: TObject);
+    procedure btnNum6Click(Sender: TObject);
+    procedure btnNum7Click(Sender: TObject);
+    procedure btnNum8Click(Sender: TObject);
+    procedure btnNum9Click(Sender: TObject);
+    procedure btnSignClick(Sender: TObject);
+    procedure btnPointClick(Sender: TObject);
+    procedure btnBackSpaceClick(Sender: TObject);
+    procedure btnAddClick(Sender: TObject);
+    procedure btnSubClick(Sender: TObject);
+    procedure btnMultiplyClick(Sender: TObject);
+    procedure btnDivideClick(Sender: TObject);
+    procedure btnClearClick(Sender: TObject);
+    procedure btnClearEntryClick(Sender: TObject);
+    procedure btnEqualClick(Sender: TObject);
+    procedure btnPercentClick(Sender: TObject);
+    procedure btnInverseClick(Sender: TObject);
+    procedure btnSquareClick(Sender: TObject);
+    procedure btnRootClick(Sender: TObject);
+    procedure btnLoad1Click(Sender: TObject);
+    procedure btnLoad2Click(Sender: TObject);
+    procedure btnLoad3Click(Sender: TObject);
+    procedure btnLoad4Click(Sender: TObject);
+    procedure btn2jinClick(Sender: TObject);
+    procedure edtResultChange(Sender: TObject);
+    procedure edtMem1Change(Sender: TObject);
+    procedure edtMem2Change(Sender: TObject);
+    procedure edtMem3Change(Sender: TObject);
+    procedure edtMem4Change(Sender: TObject);
+    procedure btn8jinClick(Sender: TObject);
+    procedure btn16jinClick(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    procedure CreateNum(ANumber: String);
+    procedure CreateFormula(AOperator: String);
+    procedure Calculate;
+    function DividebyZeroCheck: Boolean;
+    procedure FormulaMemory;
+  end;
+
+var
+  frmMain: TfrmMain;
+  Num: String = '0';             // 입력되는 숫자(피연산자)
+  NumEditFlag: Boolean;          // 숫자를 입력하는 상태는 True, 연산자를 클릭한 후에는 False
+  Formula: String = '';          // 수식
+  CalcResult: Double = 0.0;      // 수식 계산 결과
+  ReservedFormula: String = '';  // 진법 변환시 활용
+  DoubleEqual: Boolean = False;  // '='을 다시 클릭했을때 활용
+
+
+
+implementation
+
+{$R *.dfm}
+
+
+// 수식 계산
+procedure TfrmMain.Calculate;
+begin
+  if Formula[Formula.Length-1] = '+' then
+    begin
+      CalcResult := CalcResult + StrToFloat(Num);
+      frmMain.edtResult.Text := FloatToStr(CalcResult);
+    end
+  else if Formula[Formula.Length-1] = '-' then
+    begin
+      CalcResult := CalcResult - StrToFloat(Num);
+      frmMain.edtResult.Text := FloatToStr(CalcResult);
+    end
+  else if Formula[Formula.Length-1] = 'x' then
+    begin
+      CalcResult := CalcResult * StrToFloat(Num);
+      frmMain.edtResult.Text := FloatToStr(CalcResult);
+    end
+  else if Formula[Formula.Length-1] = '÷' then
+    begin
+      CalcResult := CalcResult / StrToFloat(Num);
+      frmMain.edtResult.Text := FloatToStr(CalcResult);
+    end
+end;
+
+
+
+// 수식(Formula) 작성
+procedure TfrmMain.CreateFormula(AOperator: String);
+begin
+  if DoubleEqual = True then
+  begin
+    Calculate;
+    Formula := Formula + Num + ' ' + AOperator + ' ';
+    frmMain.edtFormula.Text := Formula;
+    NumEditFlag := False;
+    DoubleEqual := False;
+    Exit;
+  end;
+  if (Formula <> '') and (Formula[Formula.Length-1] <> AOperator) and (NumEditFlag = False) then
+  begin
+    Formula := Formula.Substring(0, Formula.Length-2) + AOperator + ' ';
+    frmMain.edtFormula.Text := Formula;
+    Exit;
+  end;
+  if (Formula <> '') and (Formula[Formula.Length-1] = AOperator) and (NumEditFlag = False) then
+    Exit;
+  if Formula = '' then
+  begin
+    Formula := Formula + Num + ' ' + AOperator + ' ';
+    frmMain.edtFormula.Text := Formula;
+    NumEditFlag := False;
+    Exit;
+  end;
+  Calculate;
+  Formula := Formula + Num + ' ' + AOperator + ' ';
+  frmMain.edtFormula.Text := Formula;
+  NumEditFlag := False;
+end;
+
+
+
+// 숫자(Num) 작성
+procedure TfrmMain.CreateNum(ANumber: String);
+begin
+  NumEditFlag := True;
+  if (Formula <> '') and (Formula[Formula.Length-1] = '=') then
+  begin
+    frmMain.edtFormula.Text := '';
+    Formula := '';
+  end;
+  if Num = '0' then
+    Num := '';
+  Num := Num + ANumber;
+  frmMain.edtResult.Text := Num;
+end;
+
+
+
+// 0으로 나눌 경우 체크
+function TfrmMain.DividebyZeroCheck;
+begin
+  if (StrToFloat(Num) = 0.0) and (Formula[Formula.Length-1] = '÷') then
+    begin
+      frmMain.edtResult.Text := '0으로 나눌 수 없습니다.';
+      Result := True;
+    end
+  else
+    Result := False;
+end;
+
+
+
+// 진법 변환 버튼, 불러오기 버튼 접근제어
+procedure TfrmMain.edtMem1Change(Sender: TObject);
+var
+  Check: String;
+begin
+  Check := frmMain.edtMem1.Text;
+  if Check = '' then
+    frmMain.btnLoad1.Enabled := False
+  else
+    frmMain.btnLoad1.Enabled := True;
+end;
+
+procedure TfrmMain.edtMem2Change(Sender: TObject);
+var
+  Check: String;
+begin
+  Check := frmMain.edtMem2.Text;
+  if Check = '' then
+    frmMain.btnLoad2.Enabled := False
+  else
+    frmMain.btnLoad2.Enabled := True;
+end;
+
+procedure TfrmMain.edtMem3Change(Sender: TObject);
+var
+  Check: String;
+begin
+  Check := frmMain.edtMem3.Text;
+  if Check = '' then
+    frmMain.btnLoad3.Enabled := False
+  else
+    frmMain.btnLoad3.Enabled := True;
+end;
+
+procedure TfrmMain.edtMem4Change(Sender: TObject);
+var
+  Check: String;
+begin
+  Check := frmMain.edtMem4.Text;
+  if Check = '' then
+    frmMain.btnLoad4.Enabled := False
+  else
+    frmMain.btnLoad4.Enabled := True;
+end;
+
+procedure TfrmMain.edtResultChange(Sender: TObject);  // 음수 혹은 소수이면 Disabled
+var
+  Check: String;
+begin
+  Check := frmMain.edtResult.Text;
+  if (Check.IndexOf('-') >= 0) or (Check.IndexOf('.') >= 0)
+    or (Check = '') or (StrToInt(Check) > 32767) then
+  begin
+    frmMain.btn2jin.Enabled := False;
+    frmMain.btn8jin.Enabled := False;
+    frmMain.btn16jin.Enabled := False;
+  end
+  else
+  begin
+    frmMain.btn2jin.Enabled := True;
+    frmMain.btn8jin.Enabled := True;
+    frmMain.btn16jin.Enabled := True;
+  end;
+end;
+
+
+
+// 수식 및 결과값 저장(Memory)
+procedure TfrmMain.FormulaMemory;
+var
+  MemFormula: String;
+begin
+  MemFormula := Formula + FloatToStr(CalcResult);
+  frmMain.edtMem1.Text := frmMain.edtMem2.Text;
+  frmMain.edtMem2.Text := frmMain.edtMem3.Text;
+  frmMain.edtMem3.Text := frmMain.edtMem4.Text;
+  frmMain.edtMem4.Text := MemFormula;
+end;
+
+
+
+// 수식 및 결과값 불러오기
+procedure TfrmMain.btnLoad1Click(Sender: TObject);
+var
+  LoadedF: String;
+  LoadedR: String;
+begin
+  if frmMain.edtMem1.Text = '' then
+    Exit;
+  LoadedF := frmMain.edtMem1.Text;
+  LoadedR := LoadedF.Substring(LoadedF.IndexOf('=')+1);
+  LoadedF := LoadedF.Substring(0, LoadedF.IndexOf('=')+2);
+  CalcResult := StrToFloat(LoadedR);
+  Formula := LoadedF;
+  frmMain.edtFormula.Text := Formula;
+  frmMain.edtResult.Text := FloatToStr(CalcResult);
+
+  frmMain.edtMem1.Text := '';
+end;
+
+procedure TfrmMain.btnLoad2Click(Sender: TObject);
+var
+  LoadedF: String;
+  LoadedR: String;
+begin
+  if frmMain.edtMem2.Text = '' then
+    Exit;
+  LoadedF := frmMain.edtMem2.Text;
+  LoadedR := LoadedF.Substring(LoadedF.IndexOf('=')+1);
+  LoadedF := LoadedF.Substring(0, LoadedF.IndexOf('=')+2);
+  CalcResult := StrToFloat(LoadedR);
+  Formula := LoadedF;
+  frmMain.edtFormula.Text := Formula;
+  frmMain.edtResult.Text := FloatToStr(CalcResult);
+
+  frmMain.edtMem2.Text := frmMain.edtMem1.Text;
+  frmMain.edtMem1.Text := '';
+end;
+
+procedure TfrmMain.btnLoad3Click(Sender: TObject);
+var
+  LoadedF: String;
+  LoadedR: String;
+begin
+  if frmMain.edtMem3.Text = '' then
+    Exit;
+  LoadedF := frmMain.edtMem3.Text;
+  LoadedR := LoadedF.Substring(LoadedF.IndexOf('=')+1);
+  LoadedF := LoadedF.Substring(0, LoadedF.IndexOf('=')+2);
+  CalcResult := StrToFloat(LoadedR);
+  Formula := LoadedF;
+  frmMain.edtFormula.Text := Formula;
+  frmMain.edtResult.Text := FloatToStr(CalcResult);
+
+  frmMain.edtMem3.Text := frmMain.edtMem2.Text;
+  frmMain.edtMem2.Text := frmMain.edtMem1.Text;
+  frmMain.edtMem1.Text := '';
+end;
+
+procedure TfrmMain.btnLoad4Click(Sender: TObject);
+var
+  LoadedF: String;
+  LoadedR: String;
+begin
+  if frmMain.edtMem4.Text = '' then
+    Exit;
+  LoadedF := frmMain.edtMem4.Text;
+  LoadedR := LoadedF.Substring(LoadedF.IndexOf('=')+1);
+  LoadedF := LoadedF.Substring(0, LoadedF.IndexOf('=')+2);
+  CalcResult := StrToFloat(LoadedR);
+  Formula := LoadedF;
+  frmMain.edtFormula.Text := Formula;
+  frmMain.edtResult.Text := FloatToStr(CalcResult);
+
+  frmMain.edtMem4.Text := frmMain.edtMem3.Text;
+  frmMain.edtMem3.Text := frmMain.edtMem2.Text;
+  frmMain.edtMem2.Text := frmMain.edtMem1.Text;
+  frmMain.edtMem1.Text := '';
+end;
+
+
+
+// 진법 변환
+procedure TfrmMain.btn2jinClick(Sender: TObject);
+var
+  Num10jin: Integer;
+  Num2jin: String;
+  Num2jinResult: String;
+  I: Integer;
+begin
+  Num2jin := '';
+  Num2jinResult := '';
+  Num10jin := StrToInt(frmMain.edtResult.Text);
+  for I := 1 to 16 do
+  begin
+    Num2jin := Num2jin + IntToStr(Num10jin mod 2);
+    Num10jin := Num10jin div 2;
+  end;
+  for I := 0 to 15 do
+  begin
+    if I mod 4 = 0 then
+      Num2jinResult := Num2jinResult + ' ';
+    Num2jinResult := Num2jinResult + Num2jin[16-I];
+  end;
+  Num2jinResult := Num2jinResult + '  (2)';
+  frmMain.edtJinNum.Text := Num2jinResult;
+end;
+
+procedure TfrmMain.btn8jinClick(Sender: TObject);
+var
+  Num10jin: Integer;
+  Num8jin: String;
+  Num8jinResult: String;
+  I: Integer;
+begin
+  Num8jin := '';
+  Num8jinResult := '';
+  Num10jin := StrToInt(frmMain.edtResult.Text);
+  for I := 1 to 6 do
+  begin
+    Num8jin := Num8jin + IntToStr(Num10jin mod 8);
+    Num10jin := Num10jin div 8;
+  end;
+  for I := 0 to 5 do
+  begin
+    if I mod 3 = 0 then
+      Num8jinResult := Num8jinResult + ' ';
+    Num8jinResult := Num8jinResult + Num8jin[6-I];
+  end;
+  Num8jinResult := Num8jinResult + '  (8)';
+  frmMain.edtJinNum.Text := Num8jinResult;
+end;
+
+procedure TfrmMain.btn16jinClick(Sender: TObject);
+var
+  Num10jin: Integer;
+  Num16jin: String;
+  Num16jinResult: String;
+  NumMod: String;
+  I: Integer;
+begin
+  Num16jin := '';
+  Num16jinResult := '';
+  NumMod := '';
+  Num10jin := StrToInt(frmMain.edtResult.Text);
+  for I := 1 to 4 do
+  begin
+    NumMod := IntToStr(Num10jin mod 16);
+    if (Num10jin mod 16) = 10 then
+      NumMod := 'A'
+    else if (Num10jin mod 16) = 11 then
+      NumMod := 'B'
+    else if (Num10jin mod 16) = 12 then
+      NumMod := 'C'
+    else if (Num10jin mod 16) = 13 then
+      NumMod := 'D'
+    else if (Num10jin mod 16) = 14 then
+      NumMod := 'E'
+    else if (Num10jin mod 16) = 15 then
+      NumMod := 'F';
+    Num16jin := Num16jin + NumMod;
+    Num10jin := Num10jin div 16;
+  end;
+  for I := 0 to 3 do
+  begin
+    Num16jinResult := Num16jinResult + Num16jin[4-I];
+  end;
+  Num16jinResult := Num16jinResult + '  (16)';
+  frmMain.edtJinNum.Text := Num16jinResult;
+end;
+
+
+
+// 일반 연산(+, -, x, ÷) 입력
+procedure TfrmMain.btnAddClick(Sender: TObject);
+begin
+  if Formula = '' then
+  begin
+    CalcResult := StrToFloat(Num);
+    CreateFormula('+');
+    Exit;
+  end
+  else
+  begin
+    CreateFormula('+');
+    if DividebyZeroCheck then
+      Exit;
+  end;
+end;
+
+procedure TfrmMain.btnSubClick(Sender: TObject);
+begin
+  if Formula = '' then
+  begin
+    CalcResult := StrToFloat(Num);
+    CreateFormula('-');
+    Exit;
+  end
+  else
+  begin
+    CreateFormula('-');
+    if DividebyZeroCheck then
+      Exit;
+  end;
+end;
+
+procedure TfrmMain.btnMultiplyClick(Sender: TObject);
+begin
+  if Formula = '' then
+  begin
+    CalcResult := StrToFloat(Num);
+    CreateFormula('x');
+    Exit;
+  end
+  else
+  begin
+    CreateFormula('x');
+    if DividebyZeroCheck then
+      Exit;
+  end;
+end;
+
+procedure TfrmMain.btnDivideClick(Sender: TObject);
+begin
+  if Formula = '' then
+  begin
+    CalcResult := StrToFloat(Num);
+    CreateFormula('÷');
+    Exit;
+  end
+  else
+  begin
+    CreateFormula('÷');
+    if DividebyZeroCheck then
+      Exit;
+  end;
+end;
+
+procedure TfrmMain.btnEqualClick(Sender: TObject);
+var
+  StartIndex: Integer;
+  EndIndex: Integer;
+  SubFormula, SubOp: String;
+begin
+  if Formula = '' then
+  begin
+    CalcResult := StrToFloat(Num);
+    Exit;
+  end
+  else if Formula[Formula.Length-1] = '=' then  // '='를 클릭하고 다시 '='를 클릭
+  begin
+    DoubleEqual := True;
+    StartIndex := Formula.LastIndexOf(' ', Formula.Length-4)-2;
+    EndIndex := Formula.LastIndexOf(' ', Formula.Length-2);
+    SubFormula := Formula.Substring(StartIndex, EndIndex-StartIndex);
+    SubOp := SubFormula.Substring(0, 3);
+    Formula := FloatToStr(CalcResult) + SubOp;
+    Num := SubFormula.Substring(3);
+    CreateFormula('=');
+  end
+  else
+  begin
+    CreateFormula('=');
+    if DividebyZeroCheck then
+      Exit;
+  end;
+  FormulaMemory;
+end;
+
+
+
+// 특수 연산(%, inv, sqr, sqrt) 입력
+procedure TfrmMain.btnPercentClick(Sender: TObject);
+begin
+  if Formula = '' then
+    Exit
+  else
+  begin
+    if (Formula[Formula.Length-1] = '+') or (Formula[Formula.Length-1] = '-') then
+    begin
+      Num := FloatToStr(CalcResult*(StrToFloat(Num)/100));
+      frmMain.edtResult.Text := Num;
+    end
+    else
+    begin
+      Num := FloatToStr(StrToFloat(Num)/100);
+      frmMain.edtResult.Text := Num;
+    end;
+  end;
+end;
+
+procedure TfrmMain.btnInverseClick(Sender: TObject);
+begin
+  if StrToFloat(frmMain.edtResult.Text) = 0.0 then
+  begin
+    frmMain.edtResult.Text := '0으로 나눌 수 없습니다.';
+    Exit;
+  end;
+  if (Formula <> '') and (Formula[Formula.Length-1] = '=') then
+  begin
+    Num := FloatToStr(1/StrToFloat(frmMain.edtResult.Text));
+    Formula := Num + '   ';
+    frmMain.edtFormula.Text := Num;
+    CalcResult := StrToFloat(Num);
+  end
+  else
+  begin
+    Num := FloatToStr(1/StrToFloat(frmMain.edtResult.Text));
+    frmMain.edtResult.Text := Num;
+  end;
+end;
+
+procedure TfrmMain.btnSquareClick(Sender: TObject);
+begin
+  if (Formula <> '') and (Formula[Formula.Length-1] = '=') then
+  begin
+    Num := FloatToStr(Sqr(StrToFloat(frmMain.edtResult.Text)));
+    Formula := Num + '   ';
+    frmMain.edtFormula.Text := Num;
+    CalcResult := StrToFloat(Num);
+  end
+  else
+  begin
+    Num := FloatToStr(Sqr(StrToFloat(frmMain.edtResult.Text)));
+    frmMain.edtResult.Text := Num;
+  end;
+end;
+
+procedure TfrmMain.btnRootClick(Sender: TObject);
+begin
+  if (StrToFloat(frmMain.edtResult.Text)) < 0 then
+  begin
+    frmMain.edtResult.Text := '입력이 잘못되었습니다.';
+    Exit;
+  end;
+  if (Formula <> '') and (Formula[Formula.Length-1] = '=') then
+  begin
+    Num := FloatToStr(Sqrt(StrToFloat(frmMain.edtResult.Text)));
+    Formula := Num + '   ';
+    frmMain.edtFormula.Text := Num;
+    CalcResult := StrToFloat(Num);
+  end
+  else
+  begin
+    Num := FloatToStr(Sqrt(StrToFloat(frmMain.edtResult.Text)));
+    frmMain.edtResult.Text := Num;
+  end;
+end;
+
+
+
+// 클리어, 백스페이스 입력
+procedure TfrmMain.btnBackSpaceClick(Sender: TObject);
+begin
+  if (Formula <> '') and (Formula[Formula.Length-1] = '=') then
+  begin
+    frmMain.edtFormula.Text := '';
+    Formula := '';
+    Num := frmMain.edtResult.Text;
+    Exit;
+  end;
+  Num := Num.Substring(0, Num.Length-1);
+  if Num = '' then
+    Num := '0';
+  frmMain.edtResult.Text := Num;
+end;
+
+procedure TfrmMain.btnClearClick(Sender: TObject);
+begin
+  frmMain.edtFormula.Text := '';
+  frmMain.edtResult.Text := '0';
+  Num := '0';
+  Formula := '';
+  frmMain.edtJinNum.Text := '';
+end;
+
+procedure TfrmMain.btnClearEntryClick(Sender: TObject);
+begin
+  Num := '0';
+  frmMain.edtResult.Text := '0';
+  frmMain.edtJinNum.Text := '';
+end;
+
+
+
+// 숫자 입력
+procedure TfrmMain.btnNum0Click(Sender: TObject);
+begin
+if NumEditFlag = False then
+begin
+  NumEditFlag := True;
+  Num := '0';
+end;
+  CreateNum('0');
+end;
+
+procedure TfrmMain.btnNum1Click(Sender: TObject);
+begin
+if NumEditFlag = False then
+begin
+  NumEditFlag := True;
+  Num := '0';
+end;
+  CreateNum('1');
+end;
+
+procedure TfrmMain.btnNum2Click(Sender: TObject);
+begin
+if NumEditFlag = False then
+begin
+  NumEditFlag := True;
+  Num := '0';
+end;
+  CreateNum('2');
+end;
+
+procedure TfrmMain.btnNum3Click(Sender: TObject);
+begin
+if NumEditFlag = False then
+begin
+  NumEditFlag := True;
+  Num := '0';
+end;
+  CreateNum('3');
+end;
+
+procedure TfrmMain.btnNum4Click(Sender: TObject);
+begin
+if NumEditFlag = False then
+begin
+  NumEditFlag := True;
+  Num := '0';
+end;
+  CreateNum('4');
+end;
+
+procedure TfrmMain.btnNum5Click(Sender: TObject);
+begin
+if NumEditFlag = False then
+begin
+  NumEditFlag := True;
+  Num := '0';
+end;
+  CreateNum('5');
+end;
+
+procedure TfrmMain.btnNum6Click(Sender: TObject);
+begin
+if NumEditFlag = False then
+begin
+  NumEditFlag := True;
+  Num := '0';
+end;
+  CreateNum('6');
+end;
+
+procedure TfrmMain.btnNum7Click(Sender: TObject);
+begin
+if NumEditFlag = False then
+begin
+  NumEditFlag := True;
+  Num := '0';
+end;
+  CreateNum('7');
+end;
+
+procedure TfrmMain.btnNum8Click(Sender: TObject);
+begin
+if NumEditFlag = False then
+begin
+  NumEditFlag := True;
+  Num := '0';
+end;
+  CreateNum('8');
+end;
+
+procedure TfrmMain.btnNum9Click(Sender: TObject);
+begin
+if NumEditFlag = False then
+begin
+  NumEditFlag := True;
+  Num := '0';
+end;
+  CreateNum('9');
+end;
+
+procedure TfrmMain.btnPointClick(Sender: TObject);
+begin
+  if Num.IndexOf('.') < 0 then
+    Num := Num + '.';
+  frmMain.edtResult.Text := Num;
+end;
+
+procedure TfrmMain.btnSignClick(Sender: TObject);
+begin
+  if (Formula <> '') and (Formula[Formula.Length-1] = '=') then
+  begin
+    frmMain.edtFormula.Text := '';
+    Formula := '';
+    Num := frmMain.edtResult.Text;
+  end;
+  if Num[1] <> '-' then
+  begin
+    if Num = '0' then
+      Num := '';
+    Num := '-' + Num;
+  end
+  else
+    Num := Num.Substring(1);
+  frmMain.edtResult.Text := Num;
+end;
+
+
+
+// Key 입력 이벤트
+procedure TfrmMain.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = '0' then btnNum0Click(Sender)
+  else if Key = '1' then btnNum1Click(Sender)
+  else if Key = '2' then btnNum2Click(Sender)
+  else if Key = '3' then btnNum3Click(Sender)
+  else if Key = '4' then btnNum4Click(Sender)
+  else if Key = '5' then btnNum5Click(Sender)
+  else if Key = '6' then btnNum6Click(Sender)
+  else if Key = '7' then btnNum7Click(Sender)
+  else if Key = '8' then btnNum8Click(Sender)
+  else if Key = '9' then btnNum9Click(Sender)
+  else if Key = '+' then btnAddClick(Sender)
+  else if Key = '-' then btnSubClick(Sender)
+  else if Key = '*' then btnMultiplyClick(Sender)
+  else if Key = '/' then btnDivideClick(Sender)
+  else if Key = #27 then btnClearClick(Sender)
+  else if Key = #13 then btnEqualClick(Sender)
+  else if Key = '.' then btnPointClick(Sender)
+  else if Key = #8 then btnBackSpaceClick(Sender);
+end;
+
+end.
+
