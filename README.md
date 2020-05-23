@@ -1,6 +1,5 @@
-Calculate Project
----
+# Calculate Project
 
-![](./img/main.PNG)
+![](./img/main.png)
 
-![](./img/execute.PNG)
+![](./img/execute.png)
