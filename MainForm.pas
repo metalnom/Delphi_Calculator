@@ -85,6 +85,7 @@ type
     procedure btn8jinClick(Sender: TObject);
     procedure btn16jinClick(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
   public
@@ -111,7 +112,10 @@ implementation
 
 {$R *.dfm}
 
-
+procedure TfrmMain.FormCreate(Sender: TObject);
+begin
+  frmMain.SetFocusedControl(btnEqual);
+end;
 
 // 숫자 입력
 procedure TfrmMain.btnNum0Click(Sender: TObject);
@@ -821,6 +825,7 @@ begin
   else if Key = #13 then btnEqualClick(Sender)      // Enter
   else if Key = '.' then btnPointClick(Sender)
   else if Key = #8 then btnBackSpaceClick(Sender);  // BackSpace
+  frmMain.SetFocusedControl(btnEqual);
 end;
 
 end.

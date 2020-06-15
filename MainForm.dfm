@@ -12,6 +12,7 @@ object frmMain: TfrmMain
   Font.Style = []
   KeyPreview = True
   OldCreateOrder = False
+  OnCreate = FormCreate
   OnKeyPress = FormKeyPress
   DesignSize = (
     650
@@ -82,6 +83,7 @@ object frmMain: TfrmMain
     Font.Style = []
     ParentFont = False
     TabOrder = 2
+    TabStop = False
     OnClick = btnPercentClick
   end
   object btnClearEntry: TButton
@@ -97,6 +99,7 @@ object frmMain: TfrmMain
     Font.Style = []
     ParentFont = False
     TabOrder = 3
+    TabStop = False
     OnClick = btnClearEntryClick
   end
   object btnClear: TButton
@@ -112,6 +115,7 @@ object frmMain: TfrmMain
     Font.Style = []
     ParentFont = False
     TabOrder = 4
+    TabStop = False
     OnClick = btnClearClick
   end
   object btnBackSpace: TButton
@@ -127,6 +131,7 @@ object frmMain: TfrmMain
     Font.Style = []
     ParentFont = False
     TabOrder = 5
+    TabStop = False
     OnClick = btnBackSpaceClick
   end
   object btnInverse: TButton
@@ -142,6 +147,7 @@ object frmMain: TfrmMain
     Font.Style = []
     ParentFont = False
     TabOrder = 6
+    TabStop = False
     OnClick = btnInverseClick
   end
   object btnSquare: TButton
@@ -157,6 +163,7 @@ object frmMain: TfrmMain
     Font.Style = []
     ParentFont = False
     TabOrder = 7
+    TabStop = False
     OnClick = btnSquareClick
   end
   object btnRoot: TButton
@@ -172,6 +179,7 @@ object frmMain: TfrmMain
     Font.Style = []
     ParentFont = False
     TabOrder = 8
+    TabStop = False
     OnClick = btnRootClick
   end
   object btnDivide: TButton
@@ -187,6 +195,7 @@ object frmMain: TfrmMain
     Font.Style = []
     ParentFont = False
     TabOrder = 9
+    TabStop = False
     OnClick = btnDivideClick
   end
   object btnNum7: TButton
@@ -202,6 +211,7 @@ object frmMain: TfrmMain
     Font.Style = [fsBold]
     ParentFont = False
     TabOrder = 10
+    TabStop = False
     OnClick = btnNum7Click
   end
   object btnNum8: TButton
@@ -217,6 +227,7 @@ object frmMain: TfrmMain
     Font.Style = [fsBold]
     ParentFont = False
     TabOrder = 11
+    TabStop = False
     OnClick = btnNum8Click
   end
   object btnNum9: TButton
@@ -232,6 +243,7 @@ object frmMain: TfrmMain
     Font.Style = [fsBold]
     ParentFont = False
     TabOrder = 12
+    TabStop = False
     OnClick = btnNum9Click
   end
   object btnMultiply: TButton
@@ -247,6 +259,7 @@ object frmMain: TfrmMain
     Font.Style = []
     ParentFont = False
     TabOrder = 13
+    TabStop = False
     OnClick = btnMultiplyClick
   end
   object btnNum4: TButton
@@ -262,6 +275,7 @@ object frmMain: TfrmMain
     Font.Style = [fsBold]
     ParentFont = False
     TabOrder = 14
+    TabStop = False
     OnClick = btnNum4Click
   end
   object btnNum5: TButton
@@ -277,6 +291,7 @@ object frmMain: TfrmMain
     Font.Style = [fsBold]
     ParentFont = False
     TabOrder = 15
+    TabStop = False
     OnClick = btnNum5Click
   end
   object btnNum6: TButton
@@ -292,6 +307,7 @@ object frmMain: TfrmMain
     Font.Style = [fsBold]
     ParentFont = False
     TabOrder = 16
+    TabStop = False
     OnClick = btnNum6Click
   end
   object btnSub: TButton
@@ -307,6 +323,7 @@ object frmMain: TfrmMain
     Font.Style = []
     ParentFont = False
     TabOrder = 17
+    TabStop = False
     OnClick = btnSubClick
   end
   object btnNum1: TButton
@@ -322,6 +339,7 @@ object frmMain: TfrmMain
     Font.Style = [fsBold]
     ParentFont = False
     TabOrder = 18
+    TabStop = False
     OnClick = btnNum1Click
   end
   object btnNum2: TButton
@@ -337,6 +355,7 @@ object frmMain: TfrmMain
     Font.Style = [fsBold]
     ParentFont = False
     TabOrder = 19
+    TabStop = False
     OnClick = btnNum2Click
   end
   object btnNum3: TButton
@@ -352,6 +371,7 @@ object frmMain: TfrmMain
     Font.Style = [fsBold]
     ParentFont = False
     TabOrder = 20
+    TabStop = False
     OnClick = btnNum3Click
   end
   object btnAdd: TButton
@@ -367,6 +387,7 @@ object frmMain: TfrmMain
     Font.Style = []
     ParentFont = False
     TabOrder = 21
+    TabStop = False
     OnClick = btnAddClick
   end
   object btnSign: TButton
@@ -382,6 +403,7 @@ object frmMain: TfrmMain
     Font.Style = [fsBold]
     ParentFont = False
     TabOrder = 22
+    TabStop = False
     OnClick = btnSignClick
   end
   object btnNum0: TButton
@@ -397,6 +419,7 @@ object frmMain: TfrmMain
     Font.Style = [fsBold]
     ParentFont = False
     TabOrder = 23
+    TabStop = False
     OnClick = btnNum0Click
   end
   object btnPoint: TButton
@@ -412,6 +435,7 @@ object frmMain: TfrmMain
     Font.Style = [fsBold]
     ParentFont = False
     TabOrder = 24
+    TabStop = False
     OnClick = btnPointClick
   end
   object btnEqual: TButton
@@ -427,6 +451,7 @@ object frmMain: TfrmMain
     Font.Style = []
     ParentFont = False
     TabOrder = 25
+    TabStop = False
     OnClick = btnEqualClick
   end
   object btn2jin: TButton
